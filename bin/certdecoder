@@ -12,6 +12,25 @@ class App
     # your program code here
     # You can access CLI options via
     # the options Hash
+    if options["input"]
+      @cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
+    elsif options["hostname"]
+      @cp = CertificateParser.new_from_hostname(options["hostname"])
+    else
+      error "You must include a cert file with -i or a hostname with -h."
+    end
+
+    if @cp.certs.count == 0
+      error "!! Couldn't find any valid certificates. Make sure your input contains -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- blocks."
+    elsif @cp.certs.count == 1
+      info "Found 1 certificate."
+    else
+      info "Found #{@cp.certs.count} certificates."
+    end
+
+    unless options[:silent]
+      info @cp.decoded.join("\n\n")
+    end
   end
 
   # supplemental methods here
@@ -23,11 +42,15 @@ class App
   # Accept flags via:
   # on("--flag VAL","Some flag")
   on("--input FILE", "-i FILE", "Input .crt/.pem file")
-  on("--url URL", "-u URL", "Input URL from which to fetch certificate")
+  on("--hostname HOSTNAME", "-h HOSTNAME", "Hostname from which to fetch certificate")
+  on("--crt", "Write separate .crt files to the current directory")
+  on("--txt", "Write separate decoded certificates to .txt files in the current directory")
+
   # options[flag] will contain VAL
   #
   # Specify switches via:
   # on("--[no-]switch","Some switch")
+  on("--silent", "-s", "Mute output")
   #
   # Or, just call OptionParser methods on opts
   #

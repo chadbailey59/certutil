@@ -11,10 +11,31 @@ Feature: My bootstrapped app kinda works
     And the following options should be documented:
       |--version|
       |--input  |
-      |--url    |
+      |--hostname    |
+      |--crt|
+      |--txt|
+      |--silent|
     And the banner should document that this app takes no arguments
 
-  Scenario: Parse file
+  Scenario: Parse full file
+    When I run `certdecoder -i ../../features/google-full.crt`
+    Then the output should contain "google-full.crt..."
+    And  the output should contain "Found 3 certificates."
+    And  the output should contain "Google Internet Authority"
+
+  Scenario: Parse abbreviated file
+    When I run `certdecoder -i ../../features/google-short.crt`
+    Then the output should contain "google-short.crt..."
+    And  the output should contain "Found 3 certificates."
+    And  the output should contain "Google Internet Authority"
 
   Scenario: Parse URL
+    When I run `certdecoder -h google.com`
+    Then the output should contain "Fetching certificate from google.com..."
+    And  the output should contain "Found 3 certificates."
+    And  the output should contain "Google Internet Authority"
+
+  Scenario: No cert
+    When I run `certdecoder`
+    Then the output should contain "You must include a cert file with -i or a hostname with -h."
 
