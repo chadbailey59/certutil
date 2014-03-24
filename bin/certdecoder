@@ -22,6 +22,8 @@ class App
   #
   # Accept flags via:
   # on("--flag VAL","Some flag")
+  on("--input FILE", "-i FILE", "Input .crt/.pem file")
+  on("--url URL", "-u URL", "Input URL from which to fetch certificate")
   # options[flag] will contain VAL
   #
   # Specify switches via:
