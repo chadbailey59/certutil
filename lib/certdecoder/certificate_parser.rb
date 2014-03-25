@@ -33,23 +33,27 @@ class CertificateParser
   def initialize(attrs = {})
     @input = attrs[:string]
     @name = attrs[:name]
-    @path = attrs[:path]
+    @path = Dir.pwd
     debug "Initialized with name: #{@name}, path: #{@path}."
   end
 
   def write_crt_files!
     info "Writing separate .crt files..."
-    @certs.each_with_index do |cert, i|
-      File.open(File.join(@path, "#{@name}-#{i}.crt", "w")) { |f| f.write(cert) }
+    certs.each_with_index do |cert, i|
+      File.open(File.join(@path, "#{@name}-#{i}.crt"), "w") { |f| f.write(cert) }
       debug "--> Wrote #{@name}-#{i}.crt."
     end
   end
 
   def write_txt_files!
+    info "Writing separate .txt files..."
+    decoded.each_with_index do |cert, i|
+      File.open(File.join(@path, "#{@name}-#{i}-decoded.txt"), "w") { |f| f.write(cert) }
+      debug "--> Wrote #{@name}-#{i}-decoded.txt."
+    end
   end
 
   private
-    
 
   def split_input
     debug "splitting..."

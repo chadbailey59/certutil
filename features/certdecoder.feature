@@ -18,7 +18,7 @@ Feature: My bootstrapped app kinda works
     And the banner should document that this app takes no arguments
 
   Scenario: Parse full file
-    When I run `certdecoder -i ../../features/google-full.crt`
+    When I run `certdecoder -i ../../features/google-full.crt --log-level debug`
     Then the output should contain "google-full.crt..."
     And  the output should contain "Found 3 certificates."
     And  the output should contain "Google Internet Authority"

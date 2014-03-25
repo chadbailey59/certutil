@@ -12,6 +12,7 @@ class App
     # your program code here
     # You can access CLI options via
     # the options Hash
+
     if options["input"]
       @cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
     elsif options["hostname"]
@@ -28,9 +29,10 @@ class App
       info "Found #{@cp.certs.count} certificates."
     end
 
-    unless options[:silent]
-      info @cp.decoded.join("\n\n")
-    end
+    @cp.write_crt_files! if options[:crt]
+    @cp.write_txt_files! if options[:txt]
+
+    info @cp.decoded.join("\n-----\n\n") unless options[:silent]
   end
 
   # supplemental methods here
