@@ -2,7 +2,7 @@
 
 require 'optparse'
 require 'methadone'
-require 'certdecoder.rb'
+require 'certutil.rb'
 
 class App
   include Methadone::Main
@@ -57,12 +57,12 @@ class App
   # Or, just call OptionParser methods on opts
   #
   # Require an argument
-  # arg :some_arg 
+  # arg :some_arg
   #
   # # Make an argument optional
   # arg :optional_arg, :optional
 
-  version Certdecoder::VERSION
+  version Certutil::VERSION
 
   use_log_level_option
 

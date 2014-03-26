@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'certdecoder/version'
+require 'certutil/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "certdecoder"
-  spec.version       = Certdecoder::VERSION
+  spec.name          = "certutil"
+  spec.version       = Certutil::VERSION
   spec.authors       = ["Chad Bailey"]
   spec.email         = ["chad@heroku.com"]
   spec.summary       = %q{A tool for decoding and analyzing SSL certificates.}
