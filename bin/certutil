@@ -13,7 +13,7 @@ class App
     # You can access CLI options via
     # the options Hash
 
-    @cp = CertificateParser.new(source)
+    @cp = CertificateParser.new_from_input(source)
     #if options["input"]
       #@cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
     #elsif options["hostname"]

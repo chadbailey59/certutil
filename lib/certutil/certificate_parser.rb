@@ -18,7 +18,7 @@ class CertificateParser
       if string
         path_array = path.split(File::SEPARATOR)
         debug "Creating..."
-        self.new(string: string, name: path_array.last.gsub(/(\.crt)|(.pem)/, ""))
+        self.new(string: string, name: path_array.last.gsub(/(\.crt)|(.pem)/, ""), source: :file)
       end
     rescue 
       nil
@@ -29,7 +29,7 @@ class CertificateParser
     debug "Fetching certificate from #{hostname}..."
     debug "Creating..."
     string = `openssl s_client -connect #{hostname}:443 -showcerts </dev/null`
-    self.new(string: string, name: hostname) unless string == ""
+    self.new(string: string, name: hostname, source: :hostname) unless string == ""
   end
 
   def self.new_from_gist(gist_link)
@@ -56,7 +56,7 @@ class CertificateParser
     @input = attrs[:string]
     @name = attrs[:name]
     @path = Dir.pwd
-    debug "Initialized with name: #{@name}, path: #{@path}."
+    info "Certificate loaded#{' from ' + attrs[:source].to_s if attrs[:source]}: #{@name}."
   end
 
   def write_crt_files!
