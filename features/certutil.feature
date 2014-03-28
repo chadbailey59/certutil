@@ -10,27 +10,26 @@ Feature: My bootstrapped app kinda works
     And the banner should document that this app takes options
     And the following options should be documented:
       |--version|
-      |--input  |
-      |--hostname    |
-      |--crt|
-      |--txt|
+      |--output|
+      |--split|
       |--silent|
-    And the banner should document that this app takes no arguments
+    And the banner should document that this app's arguments are:
+      |source|which is required|
 
   Scenario: Parse full file
-    When I run `certutil -i ../../features/google-full.crt --log-level debug`
+    When I run `certutil ../../features/google-full.crt --log-level debug`
     Then the output should contain "google-full.crt..."
     And  the output should contain "Found 3 certificates."
     And  the output should contain "Google Internet Authority"
 
   Scenario: Parse abbreviated file
-    When I run `certutil -i ../../features/google-short.crt`
+    When I run `certutil ../../features/google-short.crt`
     Then the output should contain "google-short.crt..."
     And  the output should contain "Found 3 certificates."
     And  the output should contain "Google Internet Authority"
 
   Scenario: Parse URL
-    When I run `certutil -h google.com`
+    When I run `certutil google.com`
     Then the output should contain "Fetching certificate from google.com..."
     And  the output should contain "Found 3 certificates."
     And  the output should contain "Google Internet Authority"

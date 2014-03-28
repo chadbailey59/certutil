@@ -8,18 +8,19 @@ class App
   include Methadone::Main
   include Methadone::CLILogging
 
-  main do # Add args you want: |like,so|
+  main do |source| # Add args you want: |like,so|
     # your program code here
     # You can access CLI options via
     # the options Hash
 
-    if options["input"]
-      @cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
-    elsif options["hostname"]
-      @cp = CertificateParser.new_from_hostname(options["hostname"])
-    else
-      error "You must include a cert file with -i or a hostname with -h."
-    end
+    @cp = CertificateParser.new(source)
+    #if options["input"]
+      #@cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
+    #elsif options["hostname"]
+      #@cp = CertificateParser.new_from_hostname(options["hostname"])
+    #else
+      #error "You must include a cert file with -i or a hostname with -h."
+    #end
 
     if @cp.certs.count == 0
       error "!! Couldn't find any valid certificates. Make sure your input contains -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- blocks."
@@ -43,16 +44,18 @@ class App
   #
   # Accept flags via:
   # on("--flag VAL","Some flag")
-  on("--input FILE", "-i FILE", "Input .crt/.pem file")
-  on("--hostname HOSTNAME", "-h HOSTNAME", "Hostname from which to fetch certificate")
-  on("--crt", "Write separate .crt files to the current directory")
-  on("--txt", "Write separate decoded certificates to .txt files in the current directory")
+  #on("--input FILE", "-i FILE", "Input .crt/.pem file")
+  #on("--hostname HOSTNAME", "-h HOSTNAME", "Hostname from which to fetch certificate")
+  on("--output FORMAT", "-o", "Write out results to the current directory (formats are crt or txt (decoded)")
+  on("--split", "-s", "Split multiple certs into separate files for writing")
+  on("--silent", "-s", "Mute output")
 
   # options[flag] will contain VAL
   #
   # Specify switches via:
   # on("--[no-]switch","Some switch")
-  on("--silent", "-s", "Mute output")
+  arg :source, "The cert(s) on which to operate (filename, hostname or gist link)"
+
   #
   # Or, just call OptionParser methods on opts
   #

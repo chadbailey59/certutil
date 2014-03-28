@@ -4,18 +4,40 @@ class CertificateParser
   include Methadone::CLILogging
   include Methadone::SH
 
+
+  def self.new_from_input(input)
+    new_from_file(input) || new_from_hostname(input)
+  end
+
   def self.new_from_file(path)
-    info "Parsing #{path}..."
-    string = File.read(path)
-    path_array = path.split(File::SEPARATOR)
-    debug "Creating..."
-    self.new(string: string, name: path_array.last.gsub(/(\.crt)|(.pem)/, ""), path: File.dirname(path))
+    # should return nil if it's not a valid cert
+
+    debug "Parsing #{path}..."
+    begin
+      string = File.read(path)
+      if string
+        path_array = path.split(File::SEPARATOR)
+        debug "Creating..."
+        self.new(string: string, name: path_array.last.gsub(/(\.crt)|(.pem)/, ""))
+      end
+    rescue 
+      nil
+    end
   end
 
   def self.new_from_hostname(hostname)
-    info "Fetching certificate from #{hostname}..."
+    debug "Fetching certificate from #{hostname}..."
     debug "Creating..."
-    self.new(string: `openssl s_client -connect #{hostname}:443 -showcerts </dev/null`, name: hostname, path: Dir.pwd)
+    string = `openssl s_client -connect #{hostname}:443 -showcerts </dev/null`
+    self.new(string: string, name: hostname) unless string == ""
+  end
+
+  def self.new_from_gist(gist_link)
+    # not yet
+  end
+
+  def self.new_from_string(string, opts = {})
+    self.new(string: string, name: (opts[:name] || "temp"))
   end
 
   def certs
