@@ -62,17 +62,32 @@ class CertificateParser
   def write_crt_files!
     info "Writing separate .crt files..."
     certs.each_with_index do |cert, i|
+      debug "right now, wd is #{Dir.pwd}"
       File.open(File.join(@path, "#{@name}-#{i}.crt"), "w") { |f| f.write(cert) }
-      debug "--> Wrote #{@name}-#{i}.crt."
+      debug "--> Wrote #{@path} -- #{@name}-#{i}.crt."
     end
+  end
+
+  def write_crt_file!
+    info "Writing .crt file..."
+    joined = certs.join("\n") + "\n"
+    File.open(File.join(@path, "#{@name}.crt"), "w") { |f| f.write(joined) }
+    debug "--> Wrote #{@path} -- #{@name}.crt."
   end
 
   def write_txt_files!
     info "Writing separate .txt files..."
     decoded.each_with_index do |cert, i|
       File.open(File.join(@path, "#{@name}-#{i}-decoded.txt"), "w") { |f| f.write(cert) }
-      debug "--> Wrote #{@name}-#{i}-decoded.txt."
+      debug "--> Wrote #{@path}/#{@name}-#{i}-decoded.txt."
     end
+  end
+
+  def write_txt_file!
+    info "Writing .txt file..."
+    joined = decoded.join("\n-----\n") + "\n"
+    File.open(File.join(@path, "#{@name}-decoded.txt"), "w") { |f| f.write(joined) }
+    debug "--> Wrote #{@path}/#{@name}-decoded.txt."
   end
 
   private

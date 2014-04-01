@@ -13,6 +13,8 @@ class App
     # You can access CLI options via
     # the options Hash
 
+    debug "from bin, wd is #{Dir.pwd}"
+
     @cp = CertificateParser.new_from_input(source)
     #if options["input"]
       #@cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
@@ -30,10 +32,15 @@ class App
       info "Found #{@cp.certs.count} certificates."
     end
 
-    @cp.write_crt_files! if options[:crt]
-    @cp.write_txt_files! if options[:txt]
+    if options[:split]
+      @cp.write_crt_files! if options[:output] == "crt"
+      @cp.write_txt_files! if options[:output] == "txt"
+    else
+      @cp.write_crt_file! if options[:output] == "crt"
+      @cp.write_txt_file! if options[:output] == "txt"
+    end
 
-    info @cp.decoded.join("\n-----\n\n") unless options[:silent]
+    info @cp.decoded.join("\n-----\n\n") unless options[:mute]
   end
 
   # supplemental methods here
@@ -48,7 +55,7 @@ class App
   #on("--hostname HOSTNAME", "-h HOSTNAME", "Hostname from which to fetch certificate")
   on("--output FORMAT", "-o", "Write out results to the current directory (formats are crt or txt (decoded)")
   on("--split", "-s", "Split multiple certs into separate files for writing")
-  on("--silent", "-s", "Mute output")
+  on("--mute", "-m", "Mute output")
 
   # options[flag] will contain VAL
   #
