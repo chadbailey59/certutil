@@ -6,7 +6,7 @@ class CertificateParser
 
 
   def self.new_from_input(input)
-    new_from_file(input) || new_from_hostname(input)
+    new_from_file(File.expand_path(input)) || new_from_hostname(input)
   end
 
   def self.new_from_file(path)

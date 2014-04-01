@@ -17,13 +17,13 @@ Feature: My bootstrapped app kinda works
       |source|which is required|
 
   Scenario: Parse full file
-    When I run `certutil ../../features/google-full.crt --log-level debug`
+    When I run `certutil ../../../../features/google-full.crt --log-level debug`
     Then the output should contain "google-full"
     And  the output should contain "Found 3 certificates."
     And  the output should contain "Google Internet Authority"
 
   Scenario: Parse abbreviated file
-    When I run `certutil ../../features/google-short.crt`
+    When I run `certutil ../../../../features/google-short.crt`
     Then the output should contain "google-short"
     And  the output should contain "Found 3 certificates."
     And  the output should contain "Google Internet Authority"
