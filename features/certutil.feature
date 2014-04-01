@@ -62,7 +62,6 @@ Feature: My bootstrapped app kinda works
     And a file named "google-full-2-decoded.txt" should exist in my current directory
     And the file named "google-full-0-decoded.txt" should contain "Google Internet Authority"
 
-  @announce
   Scenario: Write a single CRT file
     When I run `certutil google.com --log-level debug -o crt`
     Then the output should contain "google.com"
