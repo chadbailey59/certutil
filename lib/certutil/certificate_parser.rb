@@ -43,6 +43,10 @@ class CertificateParser
   def certs
     @certs ||= split_input
   end
+  
+  def flipit!
+    @certs = certs.reverse
+  end
 
   def decoded
     debug "lazy loading decoded..."

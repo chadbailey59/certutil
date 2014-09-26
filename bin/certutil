@@ -16,6 +16,8 @@ class App
     debug "from bin, wd is #{Dir.pwd}"
 
     @cp = CertificateParser.new_from_input(source)
+    puts "cp is #{@cp}, a #{@cp.class}"
+    @cp.flipit! if options[:reverse]
     #if options["input"]
       #@cp = CertificateParser.new_from_file(File.expand_path(options["input"]))
     #elsif options["hostname"]
@@ -56,6 +58,7 @@ class App
   on("--output FORMAT", "-o", "Write out results to the current directory (formats are crt or txt (decoded)")
   on("--split", "-s", "Split multiple certs into separate files for writing")
   on("--mute", "-m", "Mute output")
+  on("--reverse", "-r", "Reverse the order of multiple certs (CA first, domain last)")
 
   # options[flag] will contain VAL
   #
